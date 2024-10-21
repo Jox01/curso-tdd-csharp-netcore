@@ -1,41 +1,38 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using KataTirePressureVariation.Interfaces;
 
 namespace KataTirePressureVariation
 {
     public class Alarm
     {
-        private const double LowPressureThreshold = 17;
-        private const double HighPressureThreshold = 21;
 
-        private readonly Sensor sensor = new Sensor();
+        private const int MAX_PRESURE = 21;
+        private const int MIN_PRESURE = 17;
+        private static bool _isActive = false;
+        
+        private readonly ISensor _presureSensor;
+        private readonly IDisplay _display;
 
-        private bool alarmOn = false;
+        public Alarm(ISensor presureSensor, IDisplay display)
+        {
+            _presureSensor = presureSensor;
+            _display = display;
+        }
 
         public void Check()
         {
-            double psiPressureValue = sensor.PopNextPressurePsiValue();
+            int actualPsi = _presureSensor.GetValue();
 
-            if (psiPressureValue < LowPressureThreshold || HighPressureThreshold < psiPressureValue)
-            {
-                if (!IsAlarmOn())
-                {
-                    alarmOn = true;
-                    Console.WriteLine("Alarm activated!");
-                }
-            }
-            else
-            {
-                if (IsAlarmOn())
-                {
-                    alarmOn = false;
-                    Console.WriteLine("Alarm deactivated!");
-                }
-            }
-        }
 
-        private bool IsAlarmOn()
-        {
-            return alarmOn;
+            if (actualPsi < MIN_PRESURE || actualPsi > MAX_PRESURE)
+            {
+                _isActive = !_isActive;
+            }
+
         }
     }
 }
