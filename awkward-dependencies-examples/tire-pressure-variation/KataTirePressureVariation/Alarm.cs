@@ -36,8 +36,9 @@ namespace KataTirePressureVariation
                 if (_isActive == true)
                 {
                     _display.ShowMessage(NON_ACTIVE_MESSAGE);
-                    _isActive = false;
+                    
                 }
+                _isActive = false;
             }
         }
     }

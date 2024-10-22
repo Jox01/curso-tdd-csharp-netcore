@@ -23,7 +23,7 @@ namespace KataTirePressureVariation.Test
 
         [TestCase(16)]
         [TestCase(22)]
-        public void Activated_WhenPSI_IsOutOfRange(int psiValue)
+        public void Activated_When_PSI_Is_Out_Of_Range(int psiValue)
         {
             _pressureSensor.GetValue().Returns(psiValue);
 
@@ -34,7 +34,7 @@ namespace KataTirePressureVariation.Test
 
         [TestCase(17)]
         [TestCase(21)]
-        public void NotActivated_WhenPSI_IsWithinRange(int psiValue)
+        public void Not_Activated_When_PSI_Is_Within_Range(int psiValue)
         {
             _pressureSensor.GetValue().Returns(psiValue);
 
@@ -43,10 +43,9 @@ namespace KataTirePressureVariation.Test
             _display.DidNotReceive().ShowMessage(Arg.Any<string>());
         }
 
-        [Test]
         [TestCase(16)]
         [TestCase(22)]
-        public void Activated_Once_For_Multiple_OutOfRange(int psiValue)
+        public void Activated_Once_When_PSI_Is_Out_Of_Range_Multiple_Times(int psiValue)
         {
             _pressureSensor.GetValue().Returns(psiValue);
 
@@ -59,7 +58,7 @@ namespace KataTirePressureVariation.Test
         [Test]
         [TestCase(17)]
         [TestCase(21)]
-        public void NotActivated_For_Multiple_WithinRange(int psiValue)
+        public void Not_Activated_When_PSI_Is_Within_Range_Multiple_Times(int psiValue)
         {
             _pressureSensor.GetValue().Returns(psiValue);
 
@@ -70,24 +69,24 @@ namespace KataTirePressureVariation.Test
         }
 
         [Test]
-        public void Deactivated_WhenPSI_ReturnsToWithinRange_After_OutOfRange()
+        public void Deactivated_When_PSI_Returns_To_Within_Range_After_Being_Out_Of_Range()
         {
             _pressureSensor.GetValue().Returns(16);
-
             _alarm.Check();
             _pressureSensor.GetValue().Returns(17); 
+            
             _alarm.Check();
 
             _display.Received(1).ShowMessage("Information! Alarm deactivated");
         }
 
         [Test]
-        public void Activated_WhenPSI_GoesOutOfRange_After_WithinRange()
+        public void Activated_When_PSI_Goes_Out_Of_Range_After_Being_Within_Range()
         {
             _pressureSensor.GetValue().Returns(21);
-
             _alarm.Check();
             _pressureSensor.GetValue().Returns(22);
+            
             _alarm.Check();
 
             _display.Received(1).ShowMessage("Caution! Active alarm");
