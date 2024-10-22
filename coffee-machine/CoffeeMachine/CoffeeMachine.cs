@@ -12,6 +12,7 @@ namespace CoffeeMachineKata
         private readonly IDrinkMaker _drinkMaker;
 
         private DrinkTypes _drinkSelection = DrinkTypes.None;
+        private int _sugarCount = 0;
 
         public CoffeeMachine(IDrinkMaker drinkMaker)
         {
@@ -20,29 +21,46 @@ namespace CoffeeMachineKata
 
         public void MakeDrink()
         {
-            _drinkMaker.Execute($"{GetDrinkRepresentation()}::");
+            if (_drinkSelection != DrinkTypes.None)
+            {
+                _drinkMaker.Execute($"{GetDrinkRepresentation()}:{GetSugarRepresentation()}:{GetStickRepresentation()}");
+            }
+
+            //reset the drink selection
+            _drinkSelection = DrinkTypes.None;
+            _sugarCount = 0;
+
+        }
+
+        private string GetStickRepresentation()
+        {
+            if (_sugarCount > 0)
+            {
+                return "0";
+            }
+
+            return string.Empty;
+        }
+
+        private string GetSugarRepresentation()
+        {
+            if (_sugarCount == 0)
+            {
+                return string.Empty;
+            }
+            else if(_sugarCount == 1)
+            {
+                return "1";
+            }
+            else
+            {
+                return "2";
+            }
         }
 
         private string GetDrinkRepresentation()
         {
-         return _drinkSelection.GetCode();
-
-            if (_drinkSelection == DrinkTypes.Coffee)
-            {
-                return "C";
-            }
-
-            if (_drinkSelection == DrinkTypes.Tea)
-            {
-                return "T";
-            }
-
-            if (_drinkSelection == DrinkTypes.Chocolate)
-            {
-                return "H";
-            }
-
-            return string.Empty;
+            return _drinkSelection.GetCode();
         }
 
         public void SelectChocolate()
@@ -58,6 +76,11 @@ namespace CoffeeMachineKata
         public void SelectTea()
         {
             _drinkSelection = DrinkTypes.Tea;
+        }
+
+        public void AddSugar(int sugarCount)
+        {
+            _sugarCount += sugarCount;
         }
     }
 }
